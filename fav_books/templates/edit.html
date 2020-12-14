@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">    
+    <title>Welcome</title>
+</head>
+<body>
+    <div id='wrap'>
+        <div id='posts'>
+            <h1>Hello User: {{ user.first_name }} {{ user.last_name}}!</h1>
+        </div>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container"> 
+                <a class="navbar-brand" href="/books/user/{{user.id}}">My Favorite Books</a>
+                <span class="navbar-text">
+                <a href="/books/user/{{user.id}}" role="button" class="btn btn-sm btn-info ml-2 text-white">User Profile</a>
+                <a href="/logout" role="button" class="btn btn-sm btn-info ml-2 text-white">Logout</a>
+                </span>
+            </div>
+        </nav>
+    <div class='one_post'>
+    <div id="wrapper">
+    <h1>Edit Book</h1>
+    <form action="/books/update/{{book.id}}" method="POST">
+    {% csrf_token %}
+        {% if messages %}
+        <ul class="alert alert-secondary" role="alert">
+            {% for message in messages %}
+            <li class="text-danger">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <div id="all_data">
+        <h1>Book No.: {{book.id}}</h1>
+        <div class="form-group">
+            <label for="title">Title</label> 
+            <input type="text" name="title" id="title" class="form-control" value="{{book.title}}"></input>
+        </div>
+        <div class="form-group">
+            <label for="desc">Description</label> 
+            <textarea name="desc" id="desc" cols="30" rows="5" class="form-control">{{show.description}}</textarea>
+        </div>
+            <p>Uploaded by: {{book.uploaded_by.first_name}} {{book.uploaded_by.last_name}}</p>
+            <h4>Release Date</h4>
+                <p>{{book.created_at}}</p>
+            <h4>Last Updated</h4>
+                <p>{{book.updated_at}}</p>
+        <div id="buttons">
+            <button class="button">Update</button>
+        </div>
+        </form>
+        </div>
+        </div>
+        <div class="one_post">
+        <div class='form-box'>
+        <h3>Users who like this book: </h3>
+        <h5><a class='poster' href="/unfavorite/{{book.id}}">Un-Favorite</a></h5>
+        {% for user in book.user_likes.all %}
+        <div class="one_post">
+            <p>{{user.first_name}} {{user.last_name}}</p>
+        </div>
+        {% endfor %}
+        </div>
+        </div>
+        
+    
+</body>
+</html>

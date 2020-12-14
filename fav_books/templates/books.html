@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">    
+    <title>Favorite Books</title>
+</head>
+<body>
+    <div id='wrap'>
+        <div id='posts'>
+        <h3>Success! Welcome {{user.first_name}} {{user.last_name}}!</h3>
+            {% if messages %}
+        <div id='errors'>
+        <ul class="alert-danger" role="alert">
+            {% for message in messages %}
+            <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        </div>
+        {% endif %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container"> 
+            <a class="navbar-brand" href="/books/others/{{user.id}}">My Favorite Books</a>
+            <span class="navbar-text">
+            <a href="books/user/{{user.id}}" role="button" class="btn btn-sm btn-info ml-2 text-white">User Profile</a>
+            <a href="books/others/{{user.id}}" role="button" class="btn btn-sm btn-info ml-2 text-white">Other Users</a>
+            <a href="/logout" role="button" class="btn btn-sm btn-info ml-2 text-white">Logout</a>
+        </span>
+        </div>
+    </nav>
+    <div class="one_post">
+    <div class='form-box'>
+        <h3>Add Book</h3>          
+        <form action="/create" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" class="form-control" name="title">
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" class="form-control" name="desc">
+            </div>
+                <button type="submit" class="btn btn-primary">Add Book</button>
+            </form>
+    </div>
+    </div>
+    <div class="one_post">
+    <div class='form-box'>
+    <a href="/books/user/{{user.id}}"><h3>List of Favorite Books</h3></a>
+    {% for book in user.fav_books.all %}
+    <div class="one_post">
+        <a href="/books/{{book.id}}"><h5>Book Title: {{book.title}}</h5></a>
+        <p>Uploaded by: {{book.uploaded_by.first_name}} {{book.uploaded_by.last_name}}</p>
+        <h5><a class='poster' href="/books/edit/{{book.id}}">Remove from Favorite</a></h5>
+    </div>
+    {% endfor %}
+    </div>
+    <div class="one_post">
+    <div class='form-box'>
+    <h3>Other Books</h3>
+    {% for book in other_books %}
+    <div class="one_post">
+        <a href="/books/{{book.id}}"><h5>Book Title: {{book.title}}</h5></a>
+        <a class="poster" href="/books/others/{{book.uploaded_by.id}}"><p>Uploaded by: {{book.uploaded_by.first_name}} {{book.uploaded_by.last_name}}</p>
+        <h5><a class='poster' href="/favorite/{{book.id}}">Add to Favorite Book</a></h5>
+    </div>
+    {% endfor %}
+    </div>
+    </div>
+</div>
+</div>    
+</body>
+</html>

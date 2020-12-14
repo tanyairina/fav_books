@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">    
+    <title>Welcome</title>
+</head>
+<body>
+    <div id='wrap'>
+    <div id='posts'>
+    <h3>Succes! {{user.first_name}} {{user.last_name}}!</h3>
+        {% if messages %}
+        <div id='errors'>
+        <ul class="alert-danger" role="alert">
+            {% for message in messages %}
+            <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        </div>
+        {% endif %}
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container"> 
+                <a>My Favorite Books</a>
+                <span class="navbar-text">
+                <a href="/books" role="button" class="btn btn-sm btn-info ml-2 text-white">Home page</a>
+                <a href="/logout" role="button" class="btn btn-sm btn-info ml-2 text-white">Logout</a>
+            </span>
+            </div>
+        </nav>
+        <div class="one_post">
+        <div class='form-box'>
+        <div id="all_data">
+        <div class="one_post">
+            <h5>Book Title: {{book.title}}</h5>
+            <h5>Book Description: {{book.desc}}</h5>
+            <h5 class='poster'>Book Release: {{book.created_at}}</h5>
+            <h5 class='poster'>Book Updated: {{book.updated_at}}</h5>
+            <p class='poster' >Uploaded by: {{book.uploaded_by.first_name}} {{book.uploaded_by.last_name}}</p>
+            <a href="/books/edit/{{book.id}}">Edit</a>|<a href="/delete/{{book.id}}">Delete</a>
+        </div>
+        </div>
+        </div>
+        <div class="one_post">
+            <div class='form-box'>
+            <h3>Users who like this book: </h3>
+            <h5><a class='poster' href="/unfavorite/{{book.id}}">Remove from Favorite's</a></h5>
+            <div class="one_post">
+            {% for user in book.user_likes.all %}
+                <p>{{user.first_name}} {{user.last_name}}</p>
+            {% endfor %}
+            </div>
+            </div>
+            </div>
+    </div>
+</body>
